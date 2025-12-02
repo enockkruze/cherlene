@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CRC AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --panel: #0b1220;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22c55e;
+      --accent-dark: #16a34a;
+      --bubble-user: #1f2937;
+      --bubble-ai: #0b1220;
+      --border: #1f2937;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box }
+    html, body { margin:0; height:100%; background:linear-gradient(135deg,#0b1220 0%,#0f172a 100%); color:var(--text); font-family: Inter, Segoe UI, system-ui, -apple-system, Arial, sans-serif }
+    .app {
+      display:grid; grid-template-columns: 280px 1fr; height:100vh;
+    }
+    .sidebar {
+      background: var(--panel); border-right: 1px solid var(--border); display:flex; flex-direction:column;
+    }
+    .brand {
+      display:flex; align-items:center; gap:10px; padding:16px; border-bottom:1px solid var(--border);
+    }
+    .brand img { width:36px; height:36px; object-fit:contain; }
+    .brand h1 { font-size:16px; margin:0; letter-spacing:0.5px }
+    .nav { padding:10px; overflow:auto; }
+    .nav h3 { font-size:12px; text-transform:uppercase; color:var(--muted); margin:14px 8px }
+    .nav button {
+      width:100%; text-align:left; padding:10px 12px; margin:4px 0; border:none; border-radius:8px;
+      background:transparent; color:var(--text); cursor:pointer; transition:0.2s;
+    }
+    .nav button:hover { background:#0f172a }
+    .nav button.active { background:#0f172a; border:1px solid var(--border) }
+    .footer { margin-top:auto; padding:12px; border-top:1px solid var(--border); display:flex; gap:8px }
+    .footer button {
+      flex:1; padding:10px; border-radius:8px; border:1px solid var(--border);
+      background:#0f172a; color:var(--text); cursor:pointer;
+    }
+    .footer button.primary { background:var(--accent); color:#07120a; border:none; font-weight:600 }
+    .main { display:flex; flex-direction:column; height:100vh }
+    .topbar {
+      display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--panel);
+    }
+    .topbar .search { flex:1; display:flex; gap:8px }
+    .topbar input[type="search"] {
+      flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#0f172a; color:var(--text)
+    }
+    .topbar .actions { display:flex; gap:8px }
+    .btn {
+      border:1px solid var(--border); background:#0f172a; color:var(--text); padding:10px 12px; border-radius:10px; cursor:pointer;
+    }
+    .btn.accent { background:var(--accent); border:none; color:#07120a; font-weight:600 }
+    .content { flex:1; overflow:auto; padding:16px; }
+    /* Panels */
+    .panel { display:none; }
+    .panel.active { display:block; }
+    /* Chat */
+    .chat {
+      display:flex; flex-direction:column; gap:12px; max-width:900px; margin:0 auto;
+    }
+    .chat-thread {
+      background:var(--bg-soft); border:1px solid var(--border); border-radius:14px; padding:16px; min-height:300px;
+    }
+    .bubble {
+      max-width:70%; padding:12px 16px; margin:6px 0; border-radius:16px; line-height:1.5; position:relative; animation:fadeIn 0.2s ease;
+      white-space:pre-wrap;
+    }
+    .bubble.user { background:var(--bubble-user); margin-left:auto; border:1px solid var(--border) }
+    .bubble.ai { background:var(--bubble-ai); border:1px solid var(--border) }
+    .bubble .meta { font-size:11px; color:var(--muted); margin-top:6px }
+    .composer {
+      display:flex; gap:8px; padding:12px; background:var(--panel); border:1px solid var(--border); border-radius:14px; position:sticky; bottom:0;
+    }
+    .composer input[type="text"] {
+      flex:1; padding:12px; border-radius:10px; border:1px solid var(--border); background:#0f172a; color:var(--text)
+    }
+    .chipbar { display:flex; gap:8px; margin:8px 0; flex-wrap:wrap }
+    .chip {
+      padding:6px 10px; border:1px solid var(--border); border-radius:999px; font-size:12px; background:#0f172a; color:var(--muted); cursor:pointer;
+    }
+    .tools { display:flex; gap:8px; flex-wrap:wrap }
+    .tools input[type="file"] { display:none }
+    .tool-btn { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#0f172a; color:var(--text); cursor:pointer }
+    .preview { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px }
+    .preview img { max-height:120px; border-radius:8px; border:1px solid var(--border) }
+    /* History */
+    .history-list { display:flex; flex-direction:column; gap:8px; }
+    .history-item {
+      display:flex; gap:8px; align-items:center; justify-content:space-between; padding:10px; border:1px solid var(--border); border-radius:10px; background:#0f172a;
+    }
+    /* Library */
+    .library-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:12px }
+    .card { border:1px solid var(--border); background:#0f172a; border-radius:12px; padding:12px }
+    .card h4 { margin:0 0 8px 0 }
+    /* Labs */
+    .labs { display:grid; gap:12px; grid-template-columns:1fr 1fr }
+    .labs textarea, .labs select, .labs input {
+      width:100%; padding:10px; border-radius:10px; border:1px solid var(--border); background:#0f172a; color:var(--text)
+    }
+    /* Upgrade */
+    .plans { display:grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap:16px }
+    .plan { border:1px solid var(--border); background:#0f172a; border-radius:12px; padding:16px }
+    .plan h3 { margin:0 0 8px 0 }
+    .plan ul { padding-left:18px; color:var(--muted) }
+    .danger { color:var(--danger) }
+    @keyframes fadeIn { from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:translateY(0)} }
+    /* Modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:50 }
+    .modal { width:340px; background:#0f172a; border:1px solid var(--border); border-radius:14px; padding:16px }
+    .modal h3 { margin:0 0 10px 0 }
+    .modal .row { margin:8px 0 }
+    .modal input { width:100%; padding:10px; border-radius:10px; border:1px solid var(--border); background:#0b1220; color:var(--text) }
+    .modal .actions { display:flex; gap:8px; margin-top:12px }
+    .hidden { display:none }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="crc".png" alt="CRC AI Logo" />
+        <h1>CRC AI</h1>
+      </div>
+      <div class="nav">
+        <h3>Navigation</h3>
+        <button class="active" data-panel="chat">Chat</button>
+        <button data-panel="history">History</button>
+        <button data-panel="library">Library</button>
+        <button data-panel="imagine">Imagine</button>
+        <button data-panel="labs">Labs</button>
+        <button data-panel="upgrade">Upgrade</button>
+      </div>
+      <div class="footer">
+        <button id="loginBtn">Log in</button>
+        <button class="primary" id="signupBtn">Sign up</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="search">
+          <input type="search" id="globalSearch" placeholder="Search chats, library, or prompts..." />
+          <button class="btn" id="searchBtn">Search</button>
+        </div>
+        <div class="actions">
+          <button class="btn" id="ttsToggle">TTS: Off</button>
+          <button class="btn" id="darkToggle">Theme</button>
+          <button class="btn" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- CHAT PANEL -->
+        <section id="panel-chat" class="panel active">
+          <div class="chat">
+            <div class="chipbar">
+              <span class="chip" data-prompt="Summarize this">Summarize</span>
+              <span class="chip" data-prompt="Translate to Swahili">Translate (Swahili)</span>
+              <span class="chip" data-prompt="Rewrite professionally">Rewrite</span>
+              <span class="chip" data-prompt="Give bullet points">Bullets</span>
+            </div>
+            <div id="thread" class="chat-thread"></div>
+            <div class="preview" id="preview"></div>
+            <div class="composer">
+              <input type="text" id="msgInput" placeholder="Type a message..." />
+              <label for="imageInput" class="tool-btn">Upload image</label>
+              <input type="file" id="imageInput" accept="image/*" multiple />
+              <button class="tool-btn" id="micBtn">🎙️ Voice</button>
+              <button class="btn accent" id="sendBtn">Send</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- HISTORY PANEL -->
+        <section id="panel-history" class="panel">
+          <h2>History</h2>
+          <div class="history-list" id="historyList"></div>
+        </section>
+
+        <!-- LIBRARY PANEL -->
+        <section id="panel-library" class="panel">
+          <h2>Library</h2>
+          <div style="display:flex; gap:8px; margin-bottom:10px">
+            <input id="libTitle" placeholder="Title" />
+            <input id="libTags" placeholder="Tags (comma-separated)" />
+            <button class="btn" id="libSave">Save item</button>
+          </div>
+          <div class="library-grid" id="libraryGrid"></div>
+        </section>
+
+        <!-- IMAGINE PANEL -->
+        <section id="panel-imagine" class="panel">
+          <h2>Imagine (Image generation)</h2>
+          <div style="display:flex; gap:8px; margin-bottom:10px">
+            <input id="imaginePrompt" placeholder="Describe the image you want..." />
+            <button class="btn accent" id="imagineBtn">Generate</button>
+          </div>
+          <div id="imagineResults" class="preview"></div>
+        </section>
+
+        <!-- LABS PANEL -->
+        <section id="panel-labs" class="panel">
+          <h2>Labs</h2>
+          <div class="labs">
+            <div>
+              <label>System prompt</label>
+              <textarea id="labSystem" rows="6" placeholder="You are CRC AI, a helpful assistant."></textarea>
+            </div>
+            <div>
+              <label>Parameters</label>
+              <div class="row">
+                <label>Model</label>
+                <select id="labModel">
+                  <option value="gpt-4o-mini">gpt-4o-mini</option>
+                  <option value="gpt-4o">gpt-4o</option>
+                  <option value="o3-mini">o3-mini</option>
+                </select>
+              </div>
+              <div class="row">
+                <label>Temperature</label>
+                <input id="labTemp" type="number" step="0.1" min="0" max="2" value="0.7" />
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:10px; display:flex; gap:8px">
+            <input id="labUser" placeholder="Your test message..." />
+            <button class="btn accent" id="labRun">Run</button>
+          </div>
+          <div id="labOutput" class="chat-thread" style="margin-top:10px"></div>
+        </section>
+
+        <!-- UPGRADE PANEL -->
+        <section id="panel-upgrade" class="panel">
+          <h2>Upgrade CRC AI</h2>
+          <div class="plans">
+            <div class="plan">
+              <h3>Starter</h3>
+              <p>Perfect for personal use</p>
+              <ul>
+                <li>Basic chat</li>
+                <li>Image upload</li>
+                <li>History & library</li>
+              </ul>
+              <button class="btn accent" data-plan="starter">Choose Starter</button>
+            </div>
+            <div class="plan">
+              <h3>Pro</h3>
+              <p>For creators and builders</p>
+              <ul>
+                <li>Priority responses</li>
+                <li>Advanced Labs</li>
+                <li>Image generation</li>
+                <li>Voice features</li>
+              </ul>
+              <button class="btn accent" data-plan="pro">Choose Pro</button>
+            </div>
+            <div class="plan">
+              <h3>Studio</h3>
+              <p>Everything for production</p>
+              <ul>
+                <li>Custom models</li>
+                <li>Team library</li>
+                <li>Branding & themes</li>
+                <li>Analytics</li>
+              </ul>
+              <button class="btn accent" data-plan="studio">Choose Studio</button>
+            </div>
+          </div>
+          <p class="danger" id="upgradeMsg"></p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- AUTH MODALS -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal">
+      <h3 id="authTitle">Log in</h3>
+      <div class="row"><input id="authEmail" type="email" placeholder="Email" /></div>
+      <div class="row"><input id="authPassword" type="password" placeholder="Password" /></div>
+      <div class="actions">
+        <button class="btn" id="authCancel">Cancel</button>
+        <button class="btn accent" id="authSubmit">Submit</button>
+      </div>
+      <p class="danger" id="authError"></p>
+    </div>
+  </div>
+
+  <script>
+    // --- App State ---
+    const state = {
+      token: localStorage.getItem('crc_token') || '',
+      tts: false,
+      currentPanel: 'chat',
+      uploadFiles: [],
+      historyCache: [],
+      library: JSON.parse(localStorage.getItem('crc_library') || '[]'),
+      baseURL: 'http://127.0.0.1:8000'
+    };
+
+    // --- Panel switching ---
+    document.querySelectorAll('.nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const panel = btn.dataset.panel;
+        state.currentPanel = panel;
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + panel).classList.add('active');
+        if (panel === 'history') loadHistory();
+        if (panel === 'library') renderLibrary();
+      });
+    });
+
+    // --- Auth modal ---
+    const authModal = document.getElementById('authModal');
+    const openAuth = (mode) => {
+      document.getElementById('authTitle').textContent = mode === 'login' ? 'Log in' : 'Sign up';
+      document.getElementById('authError').textContent = '';
+      authModal.style.display = 'flex';
+      authModal.dataset.mode = mode;
+    };
+    document.getElementById('loginBtn').onclick = () => openAuth('login');
+    document.getElementById('signupBtn').onclick = () => openAuth('signup');
+    document.getElementById('authCancel').onclick = () => authModal.style.display = 'none';
+    document.getElementById('logoutBtn').onclick = () => {
+      state.token = '';
+      localStorage.removeItem('crc_token');
+      alert('Logged out');
+    };
+    document.getElementById('authSubmit').onclick = async () => {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      const mode = authModal.dataset.mode || 'login';
+      try {
+        const res = await fetch(state.baseURL + '/' + mode, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Auth failed');
+        state.token = data.token || '';
+        localStorage.setItem('crc_token', state.token);
+        authModal.style.display = 'none';
+        alert('Welcome to CRC AI!');
+      } catch (err) {
+        document.getElementById('authError').textContent = err.message;
+      }
+    };
+
+    // --- Theme toggle ---
+    document.getElementById('darkToggle').onclick = () => {
+      // Dark-only aesthetic here; you can extend with real theme switching
+      alert('Theme switched (demo)');
+    };
+
+    // --- Global search ---
+    document.getElementById('searchBtn').onclick = async () => {
+      const q = document.getElementById('globalSearch').value.trim();
+      if (!q) return;
+      try {
+        const res = await fetch(state.baseURL + '/search?q=' + encodeURIComponent(q), {
+          headers: authHeader()
+        });
+        const data = await res.json();
+        alert('Search results: ' + (data.results?.length || 0));
+      } catch (e) { alert('Search failed'); }
+    };
+
+    // --- TTS toggle ---
+    document.getElementById('ttsToggle').onclick = () => {
+      state.tts = !state.tts;
+      document.getElementById('ttsToggle').textContent = 'TTS: ' + (state.tts ? 'On' : 'Off');
+    };
+    const speak = (text) => {
+      if (!state.tts) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utter);
+    };
+
+    // --- Chips quick prompts ---
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.onclick = () => {
+        const input = document.getElementById('msgInput');
+        input.value = chip.dataset.prompt + ' — ' + (input.value || '');
+      };
+    });
+
+    // --- Voice recording ---
+    let recorder, audioChunks = [];
+    document.getElementById('micBtn').onclick = async () => {
+      if (recorder && recorder.state === 'recording') {
+        recorder.stop();
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        recorder = new MediaRecorder(stream);
+        audioChunks = [];
+        recorder.ondataavailable = e => audioChunks.push(e.data);
+        recorder.onstop = async () => {
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          const form = new FormData();
+          form.append('file', blob, 'voice.webm');
+          const res = await fetch(state.baseURL + '/transcribe', {
+            method: 'POST',
+            headers: authHeader(false),
+            body: form
+          });
+          const data = await res.json();
+          document.getElementById('msgInput').value = (data.text || '').trim();
+        };
+        recorder.start();
+        document.getElementById('micBtn').textContent = '⏹️ Stop';
+        recorder.onstop = () => { document.getElementById('micBtn').textContent = '🎙️ Voice'; };
+        // Ensure stop after 30s
+        setTimeout(() => recorder.state === 'recording' && recorder.stop(), 30000);
+      } catch {
+        alert('Microphone access failed.');
+      }
+    };
+
+    // --- Image upload previews ---
+    const imageInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+    imageInput.onchange = () => {
+      state.uploadFiles = Array.from(imageInput.files);
+      preview.innerHTML = '';
+      state.uploadFiles.forEach(file => {
+        const url = URL.createObjectURL(file);
+        const img = document.createElement('img');
+        img.src = url;
+        preview.appendChild(img);
+      });
+    };
+
+    // --- Send message ---
+    document.getElementById('sendBtn').onclick = async () => {
+      const text = document.getElementById('msgInput').value.trim();
+      if (!text && state.uploadFiles.length === 0) return;
+      addBubble('user', text);
+
+      try {
+        let aiText = '';
+        if (state.uploadFiles.length > 0) {
+          const form = new FormData();
+          state.uploadFiles.forEach((f, i) => form.append('files', f, f.name));
+          form.append('message', text);
+          const res = await fetch(state.baseURL + '/chat-image', {
+            method: 'POST',
+            headers: authHeader(false),
+            body: form
+          });
+          const data = await res.json();
+          aiText = data.reply || 'Received your images.';
+          state.uploadFiles = [];
+          preview.innerHTML = '';
+          imageInput.value = '';
+        } else {
+          const res = await fetch(state.baseURL + '/chat', {
+            method: 'POST',
+            headers: authHeader(),
+            body: JSON.stringify({ message: text })
+          });
+          const data = await res.json();
+          aiText = data.reply || '';
+        }
+        addBubble('ai', aiText);
+        speak(aiText);
+        await saveHistory(text, aiText);
+      } catch (e) {
+        addBubble('ai', 'There was an error processing your request.');
+      }
+      document.getElementById('msgInput').value = '';
+    };
+
+    function addBubble(role, text) {
+      const thread = document.getElementById('thread');
+      const b = document.createElement('div');
+      b.className = 'bubble ' + (role === 'user' ? 'user' : 'ai');
+      b.innerHTML = escapeHtml(text);
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = new Date().toLocaleTimeString();
+      b.appendChild(meta);
+      thread.appendChild(b);
+      thread.scrollTop = thread.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    // --- History ---
+    async function saveHistory(user, ai) {
+      try {
+        const res = await fetch(state.baseURL + '/history', {
+          method: 'POST',
+          headers: authHeader(),
+          body: JSON.stringify({ user, ai })
+        });
+        await res.json();
+      } catch {}
+    }
+    async function loadHistory() {
+      try {
+        const res = await fetch(state.baseURL + '/history', { headers: authHeader() });
+        const data = await res.json();
+        state.historyCache = data.items || [];
+        renderHistory();
+      } catch { renderHistory([]); }
+    }
+    function renderHistory() {
+      const wrap = document.getElementById('historyList');
+      wrap.innerHTML = '';
+      state.historyCache.forEach((h, idx) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `
+          <div>
+            <div style="font-weight:600">${escapeHtml(h.user?.slice(0, 80) || '')}</div>
+            <div style="font-size:12px; color:var(--muted)">${new Date(h.ts || Date.now()).toLocaleString()}</div>
+          </div>
+          <div>
+            <button class="btn" data-load="${idx}">Load</button>
+            <button class="btn" data-del="${idx}">Delete</button>
+          </div>
+        `;
+        wrap.appendChild(item);
+      });
+      wrap.querySelectorAll('button[data-load]').forEach(b => {
+        b.onclick = () => {
+          const h = state.historyCache[+b.dataset.load];
+          document.getElementById('thread').innerHTML = '';
+          addBubble('user', h.user || '');
+          addBubble('ai', h.ai || '');
+          document.querySelector('[data-panel="chat"]').click();
+        };
+      });
+      wrap.querySelectorAll('button[data-del]').forEach(b => {
+        b.onclick = async () => {
+          const idx = +b.dataset.del;
+          await fetch(state.baseURL + '/history/' + idx, { method:'DELETE', headers:authHeader() });
+          loadHistory();
+        };
+      });
+    }
+
+    // --- Library ---
+    function renderLibrary() {
+      const grid = document.getElementById('libraryGrid');
+      grid.innerHTML = '';
+      state.library.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h4>${escapeHtml(item.title)}</h4>
+          <div style="font-size:12px; color:var(--muted)">${escapeHtml(item.tags.join(', '))}</div>
+          <div style="margin-top:8px">${escapeHtml(item.content)}</div>
+          <div style="display:flex; gap:8px; margin-top:10px">
+            <button class="btn" data-copy="${i}">Copy</button>
+            <button class="btn" data-remove="${i}">Remove</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      grid.querySelectorAll('button[data-copy]').forEach(b => {
+        const item = state.library[+b.dataset.copy];
+        b.onclick = () => navigator.clipboard.writeText(item.content || '');
+      });
+      grid.querySelectorAll('button[data-remove]').forEach(b => {
+        b.onclick = () => {
+          const i = +b.dataset.remove;
+          state.library.splice(i,1);
+          localStorage.setItem('crc_library', JSON.stringify(state.library));
+          renderLibrary();
+        };
+      });
+    }
+    document.getElementById('libSave').onclick = () => {
+      const title = document.getElementById('libTitle').value.trim();
+      const tags = (document.getElementById('libTags').value.trim() || '').split(',').map(s => s.trim()).filter(Boolean);
+      const content = document.getElementById('msgInput').value.trim();
+      if (!title || !content) return alert('Title and content required.');
+      state.library.push({ title, tags, content });
+      localStorage.setItem('crc_library', JSON.stringify(state.library));
+      renderLibrary();
+      alert('Saved to library.');
+    };
+
+    // --- Imagine (image generation placeholder) ---
+    document.getElementById('imagineBtn').onclick = async () => {
+      const prompt = document.getElementById('imaginePrompt').value.trim();
+      if (!prompt) return;
+      const resWrap = document.getElementById('imagineResults');
+      resWrap.innerHTML = '<div class="bubble ai">Generating image...</div>';
+      try {
+        const res = await fetch(state.baseURL + '/imagine', {
+          method: 'POST',
+          headers: authHeader(),
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        resWrap.innerHTML = '';
+        (data.images || []).forEach(url => {
+          const img = document.createElement('img');
+          img.src = url;
+          resWrap.appendChild(img);
+        });
+        if (!data.images || data.images.length === 0) {
+          resWrap.innerHTML = '<div class="bubble ai">No image returned.</div>';
+        }
+      } catch {
+        resWrap.innerHTML = '<div class="bubble ai">Generation failed.</div>';
+      }
+    };
+
+    // --- Labs run ---
+    document.getElementById('labRun').onclick = async () => {
+      const system = document.getElementById('labSystem').value.trim() || 'You are CRC AI, a helpful assistant.';
+      const model = document.getElementById('labModel').value;
+      const temperature = parseFloat(document.getElementById('labTemp').value || '0.7');
+      const user = document.getElementById('labUser').value.trim();
+      if (!user) return;
+      const out = document.getElementById('labOutput');
+      out.innerHTML = '<div class="bubble ai">Running experiment...</div>';
+      try {
+        const res = await fetch(state.baseURL + '/labs', {
+          method: 'POST',
+          headers: authHeader(),
+          body: JSON.stringify({ system, model, temperature, user })
+        });
+        const data = await res.json();
+        out.innerHTML = '';
+        addSandboxBubble(out, 'user', user);
+        addSandboxBubble(out, 'ai', data.reply || '');
+      } catch {
+        out.innerHTML = '<div class="bubble ai">Experiment failed.</div>';
+      }
+    };
+    function addSandboxBubble(container, role, text) {
+      const b = document.createElement('div');
+      b.className = 'bubble ' + (role === 'user' ? 'user' : 'ai');
+      b.innerHTML = escapeHtml(text);
+      container.appendChild(b);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // --- Upgrade plans ---
+    document.querySelectorAll('.plan button').forEach(btn => {
+      btn.onclick = async () => {
+        const plan = btn.dataset.plan;
+        try {
+          const res = await fetch(state.baseURL + '/upgrade', {
+            method: 'POST',
+            headers: authHeader(),
+            body: JSON.stringify({ plan })
+          });
+          const data = await res.json();
+          document.getElementById('upgradeMsg').textContent = data.message || 'Upgrade request sent.';
+        } catch {
+          document.getElementById('upgradeMsg').textContent = 'Upgrade failed.';
+        }
+      };
+    });
+
+    // --- Helpers ---
+    function authHeader(json = true) {
+      const h = {};
+      if (json) h['Content-Type'] = 'application/json';
+      if (state.token) h['Authorization'] = 'Bearer ' + state.token;
+      return h;
+    }
+
+    // Load initial library view
+    renderLibrary();
+  </script>
+</body>
+</html>
