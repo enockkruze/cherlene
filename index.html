@@ -779,7 +779,13 @@
         <div class="ad-placeholder">Sidebar ad</div>
       </div>
 
-    <div class="promo card">
+   <div class="promo card">
+  <h3>🎁 Unlock Offers for Your Device</h3>
+  <p>Get matched with the best offers for your country and device — no restrictions.</p>
+  <a class="btn" href="https://fastrsvr.com/unlock/jktr6DR" target="_blank" rel="noopener" style="background:#2ecc71; color:#fff;">Unlock Offers</a>
+</div>
+
+<div class="promo card">
   <h3>Need a professional resume?</h3>
   <p>Boost your job applications with our polished, free resume builder.</p>
   <!-- Resume link repurposed to Pinecone Research quiz (survey/rewards audience) -->
@@ -790,22 +796,22 @@
   <h3>More Rewards & Finance Apps</h3>
   <p>Install trusted finance and rewards apps or join surveys to earn bonuses and rewards.</p>
 
-  <a class="btn" href="https://www.lnkmeup.com/view.php?id=5543067&pub=3323141" target="_blank" rel="noopener">Freegiftify — Earn Rewards</a>
-  <a class="btn" href="https://www.directcpi.com/view.php?id=5543121&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Grammarly — Free AI Writing</a>
+  <!-- US-only links marked with class -->
+  <a class="btn us-only" href="https://www.lnkmeup.com/view.php?id=5543067&pub=3323141" target="_blank" rel="noopener">Freegiftify — Earn Rewards</a>
+  <a class="btn us-only" href="https://www.directcpi.com/view.php?id=5543121&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Grammarly — Free AI Writing</a>
+  <a class="btn us-only" href="https://www.lnkmeup.com/view.php?id=5542807&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Enter to Win $500 Gift Card</a>
+  <a class="btn us-only" href="https://www.directcpi.com/view.php?id=5542777&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Win $500 Walmart Gift Card</a>
+
+  <!-- Other global links remain visible -->
   <a class="btn" href="https://www.lnksforyou.com/view.php?id=5543119&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">5‑Minute Game Challenge</a>
   <a class="btn" href="https://www.directcpi.com/view.php?id=5542900&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Top Games & Pro Tips</a>
   <a class="btn" href="https://www.lnksforyou.com/view.php?id=5542679&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Free Thanksgiving Sampler</a>
   <a class="btn" href="https://www.mobtrk.link/view.php?id=5543125&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Bắt Đầu Tải Miễn Phí</a>
   <a class="btn" href="https://www.directcpi.com/view.php?id=5542995&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Sign Up for Job Alerts</a>
-  <a class="btn" href="https://www.lnkmeup.com/view.php?id=5542807&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Enter to Win $500 Gift Card</a>
-  <a class="btn" href="https://www.directcpi.com/view.php?id=5542777&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Win $500 Walmart Gift Card</a>
 
   <!-- Existing WireX buttons kept for finance audience -->
   <a class="btn" href="https://www.mobtrk.link/view.php?id=5541873&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">WireX — Claim $10</a>
   <a class="btn" href="https://www.lnkmeup.com/view.php?id=5541872&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">WireX — Earn Rewards</a>
-
-  <!-- Link Locker smart link -->
-  <a class="btn" href="https://fastrsvr.com/unlock/jktr6DR" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block; background:#2ecc71; color:#fff;">Unlock Offers</a>
 </div>
 
 </aside>
@@ -820,5 +826,25 @@
 </footer>
 
 <script src="app.js"></script>
+
+<!-- Geo-detection script to hide US-only links -->
+<script>
+  fetch("https://ipapi.co/json/")
+    .then(response => response.json())
+    .then(data => {
+      if (data.country !== "US") {
+        document.querySelectorAll(".us-only").forEach(link => {
+          link.style.display = "none";
+        });
+        const note = document.createElement("p");
+        note.textContent = "🌍 Some offers are restricted to US visitors. Use Unlock Offers for guaranteed access.";
+        note.style.color = "#94a3b8";
+        note.style.fontSize = "14px";
+        document.querySelector(".promo.card").appendChild(note);
+      }
+    })
+    .catch(err => console.error("Geo detection failed", err));
+</script>
+
 </body>
 </html>
