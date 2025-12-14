@@ -258,7 +258,556 @@
   <a class="btn" href="https://www.lnkmeup.com/view.php?id=5541872&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">WireX — Earn Rewards</a>
   <!-- Link Locker smart link -->
   <a class="btn" href="https://fastrsvr.com/unlock/jktr6DR" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block; background:#2ecc71; color:#fff;">Unlock Offers</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enock’s Free Multi‑Converter Tool | Currency, Temperature, Length, Weight</title>
+  <meta name="description" content="Convert currencies, temperatures, lengths, and weights instantly. Fast, simple, and mobile-friendly multi-converter built by Enock." />
+
+  <!-- Clickadu verification meta tag -->
+  <meta name="clckd" content="7a07ded60e2ee438019cb9c1b6edd4e3" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Top banner ad (Clickadu) -->
+  <div class="ad-slot ad-top" aria-label="Advertisement">
+    <!-- Paste your Clickadu top banner script here -->
+    <div class="ad-placeholder">Top banner ad</div>
+  </div>
+
+  <header class="site-header">
+    <h1>Welcome to Enock’s Free Multi‑Converter Tool</h1>
+    <p>Convert currencies, temperatures, weights, and lengths instantly. Fast, clean, and ad-supported to keep it free for everyone.</p>
+  </header>
+
+  <main class="page layout">
+    <section class="content">
+      <!-- Quick tips -->
+      <div class="tips">
+        <p><strong>Tip:</strong> Copy or share your results in one click. Update currency rates below for the most accurate conversions.</p>
+      </div>
+
+      <!-- Currency Converter -->
+      <section class="card" id="currency-card">
+        <h2>Currency converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="cur-amount">Amount</label>
+            <input type="number" id="cur-amount" placeholder="e.g., 100" />
+          </div>
+          <div class="field">
+            <label for="cur-from">From</label>
+            <select id="cur-from">
+              <option value="USD">USD — US Dollar</option>
+              <option value="KES">KES — Kenyan Shilling</option>
+              <option value="EUR">EUR — Euro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cur-to">To</label>
+            <select id="cur-to">
+              <option value="KES">KES — Kenyan Shilling</option>
+              <option value="USD">USD — US Dollar</option>
+              <option value="EUR">EUR — Euro</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="cur-convert">Convert</button>
+        <div class="result-row">
+          <output id="cur-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="cur-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="cur-result">Share</button>
+          </div>
+        </div>
+
+        <details class="rates">
+          <summary>Update currency rates (optional)</summary>
+          <div class="grid">
+            <div class="field">
+              <label for="rate-USD">USD (base = 1)</label>
+              <input type="number" id="rate-USD" step="0.0001" value="1" />
+            </div>
+            <div class="field">
+              <label for="rate-KES">KES per USD</label>
+              <input type="number" id="rate-KES" step="0.0001" value="125.00" />
+            </div>
+            <div class="field">
+              <label for="rate-EUR">EUR per USD</label>
+              <input type="number" id="rate-EUR" step="0.0001" value="0.92" />
+            </div>
+          </div>
+          <button class="btn btn-outline" id="apply-rates">Apply rates</button>
+          <p class="small">These rates are local to your session and do not call any external APIs.</p>
+        </details>
+
+        <!-- Inline ad (Clickadu) under result -->
+        <div class="ad-slot ad-inline" aria-label="Advertisement">
+          <!-- Paste your Clickadu inline script here -->
+          <div class="ad-placeholder">Inline ad</div>
+        </div>
+      </section>
+
+      <!-- Temperature Converter -->
+      <section class="card" id="temp-card">
+        <h2>Temperature converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="temp-amount">Value</label>
+            <input type="number" id="temp-amount" placeholder="e.g., 37" />
+          </div>
+          <div class="field">
+            <label for="temp-from">From</label>
+            <select id="temp-from">
+              <option value="C">Celsius (°C)</option>
+              <option value="F">Fahrenheit (°F)</option>
+              <option value="K">Kelvin (K)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="temp-to">To</label>
+            <select id="temp-to">
+              <option value="F">Fahrenheit (°F)</option>
+              <option value="C">Celsius (°C)</option>
+              <option value="K">Kelvin (K)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="temp-convert">Convert</button>
+        <div class="result-row">
+          <output id="temp-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="temp-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="temp-result">Share</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Length Converter -->
+      <section class="card" id="length-card">
+        <h2>Length converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="len-amount">Value</label>
+            <input type="number" id="len-amount" placeholder="e.g., 10" />
+          </div>
+          <div class="field">
+            <label for="len-from">From</label>
+            <select id="len-from">
+              <option value="m">Meters (m)</option>
+              <option value="ft">Feet (ft)</option>
+              <option value="in">Inches (in)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="len-to">To</label>
+            <select id="len-to">
+              <option value="ft">Feet (ft)</option>
+              <option value="m">Meters (m)</option>
+              <option value="in">Inches (in)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="len-convert">Convert</button>
+        <div class="result-row">
+          <output id="len-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="len-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="len-result">Share</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weight Converter -->
+      <section class="card" id="weight-card">
+        <h2>Weight converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="wt-amount">Value</label>
+            <input type="number" id="wt-amount" placeholder="e.g., 70" />
+          </div>
+          <div class="field">
+            <label for="wt-from">From</label>
+            <select id="wt-from">
+              <option value="kg">Kilograms (kg)</option>
+              <option value="lb">Pounds (lb)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="wt-to">To</label>
+            <select id="wt-to">
+              <option value="lb">Pounds (lb)</option>
+              <option value="kg">Kilograms (kg)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="wt-convert">Convert</button>
+        <div class="result-row">
+          <output id="wt-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="wt-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="wt-result">Share</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Offers / Promotions -->
+      <section class="card offers" id="offers-section">
+        <h2>Recommended Offers</h2>
+
+        <div class="promo-grid">
+          <!-- WireX: Get $10 Reward -->
+          <div class="promo card">
+            <h3>Get $10 Reward with WireX</h3>
+            <p>Install the WireX app and sign up to claim your reward. Fast, secure, and easy to start.</p>
+            <a class="btn" href="https://www.mobtrk.link/view.php?id=5541873&pub=3323141" target="_blank" rel="noopener">Claim $10 Now</a>
+          </div>
+
+          <!-- WireX: Earn Rewards Today (other region) -->
+          <div class="promo card">
+            <h3>Earn Rewards with WireX</h3>
+            <p>Install the WireX app and start earning rewards. Available in select regions.</p>
+            <a class="btn" href="https://www.lnkmeup.com/view.php?id=5541872&pub=3323141" target="_blank" rel="noopener">Install & Earn</a>
+          </div>
+
+          <!-- Pinecone Research: Quick Quiz -->
+          <div class="promo card">
+            <h3>Pinecone Research — Quick Quiz</h3>
+            <p>Join Pinecone Research and earn by sharing your opinion. Quick quiz, fast rewards.</p>
+            <a class="btn" href="https://www.mobtrk.link/view.php?id=5542902&pub=3323141" target="_blank" rel="noopener">Start the Quiz</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Share section -->
+      <section class="share-global card">
+        <h2>Share this tool</h2>
+        <p>Help more people find quick conversions. Share it with your friends and groups.</p>
+        <div class="share-buttons">
+          <a id="share-whatsapp" class="btn btn-outline" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+          <a id="share-linkedin" class="btn btn-outline" href="#" target="_blank" rel="noopener">Share on LinkedIn</a>
+          <button id="copy-page-link" class="btn btn-outline">Copy page link</button>
+        </div>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <!-- Sidebar ad (Clickadu) -->
+      <div class="ad-slot ad-sidebar" aria-label="Advertisement">
+        <!-- Paste your Clickadu sidebar script here -->
+        <div class="ad-placeholder">Sidebar ad</div>
+      </div>
+
+     <div class="promo card">
+  <h3>Need a professional resume?</h3>
+  <p>Boost your job applications with our polished, free resume builder.</p>
+  <!-- Resume link repurposed to Pinecone Research quiz (survey/rewards audience) -->
+  <a class="btn" href="https://www.mobtrk.link/view.php?id=5542902&pub=3323141" id="resume-link" target="_blank" rel="noopener">Try the Resume Builder</a>
 </div>
+
+<div class="promo card">
+  <h3>More Rewards & Finance Apps</h3>
+  <p>Install trusted finance and rewards apps to earn bonuses and rewards.</p>
+  <a class="btn" href="https://www.mobtrk.link/view.php?id=5541873&pub=3323141" target="_blank" rel="noopener">WireX — Claim $10</a>
+  <a class="btn" href="https://www.lnkmeup.com/view.php?id=5541872&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">WireX — Earn Rewards</a>
+  <!-- Link Locker smart link -->
+  <a class="btn" href="https://fastrsvr.com/unlock/jktr6DR" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block; background:#2ecc71; color:#fff;">Unlock Offers</a>
+</div>
+</aside>
+</main>
+
+<footer class="site-footer">
+  <p>Built by Enock. Free and ad‑supported. Thanks for using the Multi‑Converter Tool.</p>
+  <nav class="footer-links">
+    <a href="#" id="privacy-link">Privacy</a>
+    <a href="#" id="contact-link">Contact</a>
+  </nav>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enock’s Free Multi‑Converter Tool | Currency, Temperature, Length, Weight</title>
+  <meta name="description" content="Convert currencies, temperatures, lengths, and weights instantly. Fast, simple, and mobile-friendly multi-converter built by Enock." />
+
+  <!-- Clickadu verification meta tag -->
+  <meta name="clckd" content="7a07ded60e2ee438019cb9c1b6edd4e3" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Top banner ad (Clickadu) -->
+  <div class="ad-slot ad-top" aria-label="Advertisement">
+    <!-- Paste your Clickadu top banner script here -->
+    <div class="ad-placeholder">Top banner ad</div>
+  </div>
+
+  <header class="site-header">
+    <h1>Welcome to Enock’s Free Multi‑Converter Tool</h1>
+    <p>Convert currencies, temperatures, weights, and lengths instantly. Fast, clean, and ad-supported to keep it free for everyone.</p>
+  </header>
+
+  <main class="page layout">
+    <section class="content">
+      <!-- Quick tips -->
+      <div class="tips">
+        <p><strong>Tip:</strong> Copy or share your results in one click. Update currency rates below for the most accurate conversions.</p>
+      </div>
+
+      <!-- Currency Converter -->
+      <section class="card" id="currency-card">
+        <h2>Currency converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="cur-amount">Amount</label>
+            <input type="number" id="cur-amount" placeholder="e.g., 100" />
+          </div>
+          <div class="field">
+            <label for="cur-from">From</label>
+            <select id="cur-from">
+              <option value="USD">USD — US Dollar</option>
+              <option value="KES">KES — Kenyan Shilling</option>
+              <option value="EUR">EUR — Euro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cur-to">To</label>
+            <select id="cur-to">
+              <option value="KES">KES — Kenyan Shilling</option>
+              <option value="USD">USD — US Dollar</option>
+              <option value="EUR">EUR — Euro</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="cur-convert">Convert</button>
+        <div class="result-row">
+          <output id="cur-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="cur-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="cur-result">Share</button>
+          </div>
+        </div>
+
+        <details class="rates">
+          <summary>Update currency rates (optional)</summary>
+          <div class="grid">
+            <div class="field">
+              <label for="rate-USD">USD (base = 1)</label>
+              <input type="number" id="rate-USD" step="0.0001" value="1" />
+            </div>
+            <div class="field">
+              <label for="rate-KES">KES per USD</label>
+              <input type="number" id="rate-KES" step="0.0001" value="125.00" />
+            </div>
+            <div class="field">
+              <label for="rate-EUR">EUR per USD</label>
+              <input type="number" id="rate-EUR" step="0.0001" value="0.92" />
+            </div>
+          </div>
+          <button class="btn btn-outline" id="apply-rates">Apply rates</button>
+          <p class="small">These rates are local to your session and do not call any external APIs.</p>
+        </details>
+
+        <!-- Inline ad (Clickadu) under result -->
+        <div class="ad-slot ad-inline" aria-label="Advertisement">
+          <!-- Paste your Clickadu inline script here -->
+          <div class="ad-placeholder">Inline ad</div>
+        </div>
+      </section>
+
+      <!-- Temperature Converter -->
+      <section class="card" id="temp-card">
+        <h2>Temperature converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="temp-amount">Value</label>
+            <input type="number" id="temp-amount" placeholder="e.g., 37" />
+          </div>
+          <div class="field">
+            <label for="temp-from">From</label>
+            <select id="temp-from">
+              <option value="C">Celsius (°C)</option>
+              <option value="F">Fahrenheit (°F)</option>
+              <option value="K">Kelvin (K)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="temp-to">To</label>
+            <select id="temp-to">
+              <option value="F">Fahrenheit (°F)</option>
+              <option value="C">Celsius (°C)</option>
+              <option value="K">Kelvin (K)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="temp-convert">Convert</button>
+        <div class="result-row">
+          <output id="temp-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="temp-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="temp-result">Share</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Length Converter -->
+      <section class="card" id="length-card">
+        <h2>Length converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="len-amount">Value</label>
+            <input type="number" id="len-amount" placeholder="e.g., 10" />
+          </div>
+          <div class="field">
+            <label for="len-from">From</label>
+            <select id="len-from">
+              <option value="m">Meters (m)</option>
+              <option value="ft">Feet (ft)</option>
+              <option value="in">Inches (in)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="len-to">To</label>
+            <select id="len-to">
+              <option value="ft">Feet (ft)</option>
+              <option value="m">Meters (m)</option>
+              <option value="in">Inches (in)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="len-convert">Convert</button>
+        <div class="result-row">
+          <output id="len-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="len-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="len-result">Share</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weight Converter -->
+      <section class="card" id="weight-card">
+        <h2>Weight converter</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="wt-amount">Value</label>
+            <input type="number" id="wt-amount" placeholder="e.g., 70" />
+          </div>
+          <div class="field">
+            <label for="wt-from">From</label>
+            <select id="wt-from">
+              <option value="kg">Kilograms (kg)</option>
+              <option value="lb">Pounds (lb)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="wt-to">To</label>
+            <select id="wt-to">
+              <option value="lb">Pounds (lb)</option>
+              <option value="kg">Kilograms (kg)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="wt-convert">Convert</button>
+        <div class="result-row">
+          <output id="wt-result" class="result">Result will appear here.</output>
+          <div class="actions">
+            <button class="btn btn-secondary" data-copy="wt-result">Copy result</button>
+            <button class="btn btn-secondary" data-share="wt-result">Share</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Offers / Promotions -->
+      <section class="card offers" id="offers-section">
+        <h2>Recommended Offers</h2>
+
+        <div class="promo-grid">
+          <!-- WireX: Get $10 Reward -->
+          <div class="promo card">
+            <h3>Get $10 Reward with WireX</h3>
+            <p>Install the WireX app and sign up to claim your reward. Fast, secure, and easy to start.</p>
+            <a class="btn" href="https://www.mobtrk.link/view.php?id=5541873&pub=3323141" target="_blank" rel="noopener">Claim $10 Now</a>
+          </div>
+
+          <!-- WireX: Earn Rewards Today (other region) -->
+          <div class="promo card">
+            <h3>Earn Rewards with WireX</h3>
+            <p>Install the WireX app and start earning rewards. Available in select regions.</p>
+            <a class="btn" href="https://www.lnkmeup.com/view.php?id=5541872&pub=3323141" target="_blank" rel="noopener">Install & Earn</a>
+          </div>
+
+          <!-- Pinecone Research: Quick Quiz -->
+          <div class="promo card">
+            <h3>Pinecone Research — Quick Quiz</h3>
+            <p>Join Pinecone Research and earn by sharing your opinion. Quick quiz, fast rewards.</p>
+            <a class="btn" href="https://www.mobtrk.link/view.php?id=5542902&pub=3323141" target="_blank" rel="noopener">Start the Quiz</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Share section -->
+      <section class="share-global card">
+        <h2>Share this tool</h2>
+        <p>Help more people find quick conversions. Share it with your friends and groups.</p>
+        <div class="share-buttons">
+          <a id="share-whatsapp" class="btn btn-outline" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+          <a id="share-linkedin" class="btn btn-outline" href="#" target="_blank" rel="noopener">Share on LinkedIn</a>
+          <button id="copy-page-link" class="btn btn-outline">Copy page link</button>
+        </div>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <!-- Sidebar ad (Clickadu) -->
+      <div class="ad-slot ad-sidebar" aria-label="Advertisement">
+        <!-- Paste your Clickadu sidebar script here -->
+        <div class="ad-placeholder">Sidebar ad</div>
+      </div>
+
+    <div class="promo card">
+  <h3>Need a professional resume?</h3>
+  <p>Boost your job applications with our polished, free resume builder.</p>
+  <!-- Resume link repurposed to Pinecone Research quiz (survey/rewards audience) -->
+  <a class="btn" href="https://www.mobtrk.link/view.php?id=5542902&pub=3323141" id="resume-link" target="_blank" rel="noopener">Try the Resume Builder</a>
+</div>
+
+<div class="promo card">
+  <h3>More Rewards & Finance Apps</h3>
+  <p>Install trusted finance and rewards apps or join surveys to earn bonuses and rewards.</p>
+
+  <a class="btn" href="https://www.lnkmeup.com/view.php?id=5543067&pub=3323141" target="_blank" rel="noopener">Freegiftify — Earn Rewards</a>
+  <a class="btn" href="https://www.directcpi.com/view.php?id=5543121&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Grammarly — Free AI Writing</a>
+  <a class="btn" href="https://www.lnksforyou.com/view.php?id=5543119&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">5‑Minute Game Challenge</a>
+  <a class="btn" href="https://www.directcpi.com/view.php?id=5542900&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Top Games & Pro Tips</a>
+  <a class="btn" href="https://www.lnksforyou.com/view.php?id=5542679&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Free Thanksgiving Sampler</a>
+  <a class="btn" href="https://www.mobtrk.link/view.php?id=5543125&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Bắt Đầu Tải Miễn Phí</a>
+  <a class="btn" href="https://www.directcpi.com/view.php?id=5542995&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Sign Up for Job Alerts</a>
+  <a class="btn" href="https://www.lnkmeup.com/view.php?id=5542807&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Enter to Win $500 Gift Card</a>
+  <a class="btn" href="https://www.directcpi.com/view.php?id=5542777&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">Win $500 Walmart Gift Card</a>
+
+  <!-- Existing WireX buttons kept for finance audience -->
+  <a class="btn" href="https://www.mobtrk.link/view.php?id=5541873&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">WireX — Claim $10</a>
+  <a class="btn" href="https://www.lnkmeup.com/view.php?id=5541872&pub=3323141" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block;">WireX — Earn Rewards</a>
+
+  <!-- Link Locker smart link -->
+  <a class="btn" href="https://fastrsvr.com/unlock/jktr6DR" target="_blank" rel="noopener" style="margin-top:8px; display:inline-block; background:#2ecc71; color:#fff;">Unlock Offers</a>
+</div>
+
 </aside>
 </main>
 
